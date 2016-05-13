@@ -12,7 +12,7 @@ namespace AspNet5Localization.Controllers
         {
             if (id == 0)
             {
-                return NotFound(id);
+                return HttpNotFound(id);
             }
 
             return Ok(new Box() { Id = id, Height = 10, Length = 10, Width=10 });
@@ -31,7 +31,7 @@ namespace AspNet5Localization.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return HttpBadRequest(ModelState);
             }
             else
             {           
@@ -47,12 +47,12 @@ namespace AspNet5Localization.Controllers
         {
             if(id == 0)
             {
-                return NotFound(box);
+                return HttpNotFound(box);
             }
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return HttpBadRequest(ModelState);
             }
             else
             {
@@ -65,7 +65,7 @@ namespace AspNet5Localization.Controllers
         {
             if (id == 0)
             {
-                return NotFound(id);
+                return HttpNotFound(id);
             }
 
             return new NoContentResult();
