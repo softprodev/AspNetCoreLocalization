@@ -1,3 +1,9 @@
+
+|                           | Badges                                                                                                                                                       |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| .net core        | [![Build status](https://ci.appveyor.com/api/projects/status/gyychgc7l5g4g5lb?svg=true)](https://ci.appveyor.com/project/damienbod/aspnet5localization)         |
+
+
 Localization.SqlLocalizer [![NuGet Status](http://img.shields.io/nuget/v/Localization.SqlLocalizer.svg?style=flat-square)](https://www.nuget.org/packages/Localization.SqlLocalizer/)
 ========================
 Documentation: http://localizationsqllocalizer.readthedocs.io/en/latest/
@@ -12,7 +18,7 @@ Add the NuGet package to the project.json file
 
 ```
 "dependencies": {
-        "Localization.SqlLocalizer": "1.0.0.0",
+        "Localization.SqlLocalizer": "1.0.7",
 ```
 
 Add the DbContext and use the AddSqlLocalization extension method to add the SQL Localization package.
