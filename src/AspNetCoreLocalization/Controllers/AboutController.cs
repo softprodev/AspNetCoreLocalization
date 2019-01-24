@@ -1,5 +1,8 @@
-﻿using Localization.SqlLocalizer.DbStringLocalizer;
+﻿using System.Globalization;
+using System.Threading;
+using Localization.SqlLocalizer.DbStringLocalizer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 
 namespace AspNetCoreLocalization.Controllers
