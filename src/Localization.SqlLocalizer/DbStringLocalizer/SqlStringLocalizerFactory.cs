@@ -68,20 +68,13 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
         {
             var returnOnlyKeyIfNotFound = _options.Value.ReturnOnlyKeyIfNotFound;
             var createNewRecordWhenLocalisedStringDoesNotExist = _options.Value.CreateNewRecordWhenLocalisedStringDoesNotExist;
-
-            var resourceKey = baseName + location;
-            if (_options.Value.UseOnlyPropertyNames)
+            if (_resourceLocalizations.Keys.Contains(baseName + location))
             {
-                resourceKey = Global;
+                return _resourceLocalizations[baseName + location];
             }
 
-            if (_resourceLocalizations.Keys.Contains(resourceKey))
-            {
-                return _resourceLocalizations[resourceKey];
-            }
-
-            var sqlStringLocalizer = new SqlStringLocalizer(GetAllFromDatabaseForResource(resourceKey), _developmentSetup, resourceKey, returnOnlyKeyIfNotFound, createNewRecordWhenLocalisedStringDoesNotExist);
-            return _resourceLocalizations.GetOrAdd(resourceKey, sqlStringLocalizer);
+            var sqlStringLocalizer = new SqlStringLocalizer(GetAllFromDatabaseForResource(baseName + location), _developmentSetup, baseName + location, returnOnlyKeyIfNotFound, createNewRecordWhenLocalisedStringDoesNotExist);
+            return _resourceLocalizations.GetOrAdd(baseName + location, sqlStringLocalizer);
         }
 
         public void ResetCache()

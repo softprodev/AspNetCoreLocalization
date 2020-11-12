@@ -60,8 +60,10 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
         public void DetachAllEntities()
         {
             var changedEntriesCopy = ChangeTracker.Entries().ToList();
-            foreach (var entry in changedEntriesCopy)
-                entry.State = EntityState.Detached;
+            foreach (var entity in changedEntriesCopy)
+            {
+                Entry(entity.Entity).State = EntityState.Detached;
+            }
         }
     }
 }

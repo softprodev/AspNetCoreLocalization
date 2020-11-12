@@ -12,18 +12,22 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using WebApiContrib.Core.Formatter.Csv;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace ImportExportLocalization
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -42,8 +46,7 @@ namespace ImportExportLocalization
             // Requires that LocalizationModelContext is defined
             services.AddSqlLocalization(options => options.UseTypeFullNames = true);
 
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson()
+            services.AddMvc()
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization();
 
@@ -69,13 +72,13 @@ namespace ImportExportLocalization
                 options.InputFormatters.Add(new CsvInputFormatter(csvFormatterOptions));
                 options.OutputFormatters.Add(new CsvOutputFormatter(csvFormatterOptions));
                 options.FormatterMappings.SetMediaTypeMappingForFormat("csv", MediaTypeHeaderValue.Parse("text/csv"));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped<ValidateMimeMultipartContentFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);
@@ -89,16 +92,13 @@ namespace ImportExportLocalization
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(routes =>
             {
-                endpoints.MapControllerRoute(
+                routes.MapRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

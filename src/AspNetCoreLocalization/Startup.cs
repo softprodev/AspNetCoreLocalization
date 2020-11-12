@@ -14,16 +14,21 @@ using Localization.SqlLocalizer.DbStringLocalizer;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
-using Microsoft.Extensions.Hosting;
 
 namespace AspNetCoreLocalization
 {
     public class Startup
     {
         private bool _createNewRecordWhenLocalisedStringDoesNotExist = false;
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
 
             if (env.IsDevelopment())
             {
@@ -31,7 +36,7 @@ namespace AspNetCoreLocalization
             }
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfigurationRoot Configuration { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -80,9 +85,7 @@ namespace AspNetCoreLocalization
                     options.SupportedUICultures = supportedCultures;
                 });
 
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization(options =>
                 {
@@ -103,23 +106,21 @@ namespace AspNetCoreLocalization
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);
 
-            app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(routes =>
             {
-                endpoints.MapControllerRoute(
+                routes.MapRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
