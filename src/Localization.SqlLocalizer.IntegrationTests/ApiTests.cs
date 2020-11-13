@@ -70,12 +70,8 @@ namespace Localization.SqlLocalizer.IntegrationTests
 
                     app.UseStaticFiles();
 
-                    app.UseRouting();
+                    app.UseMvc();
 
-                    app.UseEndpoints(builder =>
-                    {
-                        builder.MapControllers();
-                    });
                 });
 
             using (var server = new TestServer(builder))
@@ -141,12 +137,8 @@ namespace Localization.SqlLocalizer.IntegrationTests
 
                     app.UseStaticFiles();
 
-                    app.UseRouting();
+                    app.UseMvc();
 
-                    app.UseEndpoints(builder =>
-                    {
-                        builder.MapControllers();
-                    });
                 });
 
             using (var server = new TestServer(builder))
@@ -206,12 +198,7 @@ namespace Localization.SqlLocalizer.IntegrationTests
 
                     app.UseStaticFiles();
 
-                    app.UseRouting();
-
-                    app.UseEndpoints(builder =>
-                    {
-                        builder.MapControllers();
-                    });
+                    app.UseMvc();
                 });
 
             using (var server = new TestServer(builder))
@@ -270,12 +257,7 @@ namespace Localization.SqlLocalizer.IntegrationTests
                     app.UseRequestLocalization(locOptions.Value);
 
                     app.UseStaticFiles();
-                    app.UseRouting();
-
-                    app.UseEndpoints(builder =>
-                    {
-                        builder.MapControllers();
-                    });
+                    app.UseMvc();
                 });
 
             using (var server = new TestServer(builder))
@@ -335,12 +317,7 @@ namespace Localization.SqlLocalizer.IntegrationTests
 
                     app.UseStaticFiles();
 
-                    app.UseRouting();
-
-                    app.UseEndpoints(builder =>
-                    {
-                        builder.MapControllers();
-                    });
+                    app.UseMvc();
 
                     //app.Run(context =>
                     //{
@@ -409,12 +386,7 @@ namespace Localization.SqlLocalizer.IntegrationTests
 
                     app.UseStaticFiles();
 
-                    app.UseRouting();
-
-                    app.UseEndpoints(builder =>
-                    {
-                        builder.MapControllers();
-                    });
+                    app.UseMvc();
                 });
 
             using (var server = new TestServer(builder))
@@ -482,12 +454,7 @@ namespace Localization.SqlLocalizer.IntegrationTests
 
                     app.UseStaticFiles();
 
-                    app.UseRouting();
-
-                    app.UseEndpoints(builder =>
-                    {
-                        builder.MapControllers();
-                    });
+                    app.UseMvc();
 
                 });
 
